@@ -1,0 +1,110 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    background-color: #000;
+    /*cursor: none;*/
+}
+
+.photo-buffer { display: none; }
+
+.photo-frame {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: -10px;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.photo {
+    position: absolute;
+    top: 40px;
+    bottom: 180px;
+    left: 40px;
+    right: 40px;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    /*box-shadow: 0px 0px 5px 2px rgba(0,0,0,.5);*/
+}
+
+.widgets {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 140px;
+
+    background-color: rgba(0,0,0,0.9);
+    border-top: 1px solid #888;
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.5);
+
+    color: #f0f0f0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.widget {
+    position: absolute;
+    padding: 10px 20px;
+}
+
+#time {
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+
+    font-size: 72px;
+}
+#date {
+    left: 0px;
+    top: 72px;
+    bottom: 0px;
+
+    font-size: 30px;
+    color: #b0b0b0;
+}
+
+#weather {
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#weather-icon {
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#high, #low { font-size: 32px; }
+#high {
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+#high::before { content: 'H '; }
+
+#low {
+    top: 40px;
+    right: 0px;
+    bottom: 0px;
+}
+#low::before { content: 'L '; }
+
+
+#sandbox {
+    background-color: #fff;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
