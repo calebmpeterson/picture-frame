@@ -102,7 +102,7 @@
 
 (defn blur [^BufferedImage image]
   (imagez/filter-image
-   (imagez-filter/box-blur 50 50) image))
+   (imagez-filter/box-blur 40 40) image))
 
 (defn calculate-scale-factor [width height max-width max-height]
   (let [target-width  (min max-width width)
@@ -114,6 +114,10 @@
                        (.getWidth image) (.getHeight image)
                        max-width max-height)]
     (imagez/zoom scale-factor image)))
+
+(defn backgroundify [image]
+  (->> image
+       identity))
 
 
 ;;
@@ -141,6 +145,7 @@
   (-> (str photo-lib path)
       (clojure.java.io/file)
       (javax.imageio.ImageIO/read)
+      (backgroundify)
       (blur)
       (resize max-frame-width max-frame-height)
       (image->istream)))
