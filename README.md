@@ -1,6 +1,6 @@
 # picture-frame
 
-FIXME
+A simple browser-based digital photo frame app. A date/time display and daily forecast display are included but currently disabled.
 
 ## Prerequisites
 
@@ -13,19 +13,22 @@ You will need [Leiningen][1] 1.7.0 or above installed.
 
 Place the following in `config.conf`
 
-	{:photo-library "absolute-path-to-photo-library"
+	{:photo-library "absolute-path-to-your-photo-library"
  	 :wunderground-api-key "your-wunderground-api-key"
  	 :weather-location "location-for-weather-forecasts"}
- 	 
+
 
 ## Running
 
-To start a web server for the application, run:
+To start a web server for the application using [Leiningen](http://leiningen.org), run:
 
     lein ring server
-    
-    
-Resize all images with [Image Resizer](https://imageresizer.codeplex.com/wikipage?title=User%27s%20Guide&referringTitle=Documentation)
+
+When uberjar'ed:
+
+  java -Dconfig=config.conf -Xmx512M -cp target/picture-frame-standalone.jar clojure.main -m picture-frame.launcher 3282
+
+
 
 ## License
 

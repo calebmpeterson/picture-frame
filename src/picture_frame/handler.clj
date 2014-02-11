@@ -174,7 +174,7 @@
   (fn [request]
     (let [response (handler request)]
     (if (.startsWith (:uri request) path-prefix)
-        (assoc-in response [:headers "Cache-Control"] "max-age=3600")
+        (assoc-in response [:headers "Cache-Control"] "max-age=604800")
       response))))
 
 
