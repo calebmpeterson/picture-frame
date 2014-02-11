@@ -26,7 +26,7 @@ To start a web server for the application using [Leiningen](http://leiningen.org
 
 When uberjar'ed:
 
-  java -Dconfig=config.conf -Xmx512M -cp target/picture-frame-standalone.jar clojure.main -m picture-frame.launcher 3282
+    java -Dconfig=config.conf -Xmx512M -cp target/picture-frame-standalone.jar clojure.main -m picture-frame.launcher 3282
 
 
 
