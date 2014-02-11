@@ -48,34 +48,6 @@
 
 
 ;;
-;; Photo API
-;;
-
-(def photo-lib (config :photo-library))
-
-(defn rand-photo [lib-dir]
-  (->> (clojure.java.io/file lib-dir)
-    (file-seq)
-    (filter #(.isFile %))
-    (rand-nth)))
-
-(defn pathify [lib-dir photo-file]
-  (.. photo-file
-    (getPath)
-    (substring (count lib-dir))
-    (replace "\\" "/")))
-
-(defn blur [photo-file]
-  (let [img    (javax.imageio.ImageIO/read photo-file)
-        blured (imagez/filter-image
-                 (imagez-filter/box-blur 50 50) img)
-        os     (java.io.ByteArrayOutputStream.)
-        _      (javax.imageio.ImageIO/write blured, "png", os)
-        is     (java.io.ByteArrayInputStream. (.toByteArray os))]
-    is))
-
-
-;;
 ;; Weather API
 ;;
 
@@ -99,6 +71,52 @@
 
 
 ;;
+;; Photo API
+;;
+
+(def max-frame-width 1680)
+(def max-frame-height 1050)
+(def max-photo-width (- max-frame-width 80))
+(def max-photo-height (- max-frame-height 80))
+
+(def photo-lib (config :photo-library))
+
+(defn rand-photo [lib-dir]
+  (->> (clojure.java.io/file lib-dir)
+    (file-seq)
+    (filter #(.isFile %))
+    (rand-nth)))
+
+(defn pathify [lib-dir photo-file]
+  (.. photo-file
+    (getPath)
+    (substring (count lib-dir))
+    (replace "\\" "/")))
+
+(defn image->istream [^BufferedImage image]
+  (let [os (java.io.ByteArrayOutputStream.)
+        _  (javax.imageio.ImageIO/write image "png" os)
+        is (java.io.ByteArrayInputStream. (.toByteArray os))]
+    is))
+
+
+(defn blur [^BufferedImage image]
+  (imagez/filter-image
+   (imagez-filter/box-blur 50 50) image))
+
+(defn calculate-scale-factor [width height max-width max-height]
+  (let [target-width  (min max-width width)
+        target-height (min max-height height)]
+    (min (double (/ target-width width)) (double (/ target-height height)))))
+
+(defn resize [image max-width max-height]
+  (let [scale-factor (calculate-scale-factor
+                       (.getWidth image) (.getHeight image)
+                       max-width max-height)]
+    (imagez/zoom scale-factor image)))
+
+
+;;
 ;; Response Helpers
 ;;
 
@@ -106,6 +124,26 @@
   {:status (or status 200)
    :headers {"Content-Type" "application/json"}
    :body (json/write-str data)})
+
+
+;;
+;; Controller Actions
+;;
+
+(defn handle-photo [path]
+  (-> (str photo-lib path)
+      (clojure.java.io/file)
+      (javax.imageio.ImageIO/read)
+      (resize max-photo-width max-photo-height)
+      (image->istream)))
+
+(defn handle-blur [path]
+  (-> (str photo-lib path)
+      (clojure.java.io/file)
+      (javax.imageio.ImageIO/read)
+      (blur)
+      (resize max-frame-width max-frame-height)
+      (image->istream)))
 
 
 ;;
@@ -117,8 +155,8 @@
   (GET "/sandbox" [] (sandbox))
   (GET "/next" [] (pathify photo-lib (rand-photo photo-lib)))
   (GET "/weather" [] (json-response (forecast-today default-location)))
-  (GET ["/picture/:path", :path #".*"] [path] (clojure.java.io/file (str photo-lib path)))
-  (GET ["/blur/:path",    :path #".*"] [path] (blur (clojure.java.io/file (str photo-lib path))))
+  (GET ["/picture/:path", :path #".*"] [path] (handle-photo path))
+  (GET ["/blur/:path",    :path #".*"] [path] (handle-blur path))
   (route/resources "/")
   (route/not-found "Not Found"))
 

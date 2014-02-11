@@ -8,6 +8,16 @@ You will need [Leiningen][1] 1.7.0 or above installed.
 
 [1]: https://github.com/technomancy/leiningen
 
+
+## Configuration
+
+Place the following in `config.conf`
+
+	{:photo-library "absolute-path-to-photo-library"
+ 	 :wunderground-api-key "your-wunderground-api-key"
+ 	 :weather-location "location-for-weather-forecasts"}
+ 	 
+
 ## Running
 
 To start a web server for the application, run:
@@ -19,4 +29,4 @@ Resize all images with [Image Resizer](https://imageresizer.codeplex.com/wikipag
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright &copy; 2014 Caleb Peterson
